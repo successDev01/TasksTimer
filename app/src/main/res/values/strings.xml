@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Task Timer</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="mainmenu_settings">Settings</string>
+    <string name="mainmenu_addTask">Add Task</string>
+    <string name="mainmenu_durationReport">Duration Report</string>
+    <string name="mainmenu_about">Show About</string>
+    <string name="mainmenu_generate">Generate Data</string>
+</resources>

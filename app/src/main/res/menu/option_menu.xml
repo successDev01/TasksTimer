@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/mainmenu_addTask"
+        android:icon="@android:drawable/ic_menu_add"
+        android:title="@string/mainmenu_addTask"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/mainmenu_duarationReport"
+        android:icon="@android:drawable/ic_menu_view"
+        android:title="@string/mainmenu_durationReport"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/mainmenu_settigs"
+        android:title="@string/mainmenu_settings" />
+    <item
+        android:id="@+id/mainmenu_generate"
+        android:title="@string/mainmenu_generate"
+        android:visible="false" />
+    <item
+        android:id="@+id/mainmenu_about"
+        android:icon="@android:drawable/ic_menu_info_details"
+        android:title="@string/mainmenu_about"
+        app:showAsAction="ifRoom" />
+</menu>

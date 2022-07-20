@@ -1,6 +1,7 @@
 package jeremiah.adewole.tasktimer
 
 import android.content.ContentValues
+import android.content.res.Configuration
 import android.database.sqlite.SQLiteDatabase
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,23 +9,40 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentContainerView
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 private const val TAG = "MainActivity"
+private val DIALOG_ID_CANCEL_EDIT = 2
+class MainActivity : AppCompatActivity(),
+                    AddEditFragment.OnSaveClicked,
+                    MainActivityFragment.OnTaskEdit,
+                    AppDialog.DialogEvents{
 
-class MainActivity : AppCompatActivity() {
-
-//    private val toolbar : Toolbar by lazy { findViewById(R.id.toolbar) }
     private val fab : FloatingActionButton by lazy { findViewById(R.id.fab) }
 
     private lateinit var db : SQLiteDatabase
+    private var mTwoPane = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-//        setSupportActionBar(toolbar)
+
+        mTwoPane = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+        val fragment = supportFragmentManager.findFragmentById(R.id.task_details_container)
+        if (fragment != null) {
+            Log.d(TAG, "onCreate : fragment is up")
+            showEditPane()
+        } else {
+            Log.d(TAG, "onCreate : fragment is not up")
+            findViewById<FrameLayout>(R.id.task_details_container).visibility = if (mTwoPane) View.INVISIBLE else View.GONE
+            findViewById<FragmentContainerView>(R.id.main_fragment)?.visibility = View.VISIBLE
+        }
 
 //        val appDatabase = AppDatabase.getInstance(this)
 //        db = appDatabase.readableDatabase
@@ -39,7 +57,7 @@ class MainActivity : AppCompatActivity() {
 //        insertRecordContentResolver()
 //        updateRecordContentResolver()
 //        updateMultipleRecordContentResolver()
-        deleteRecordContentResolver()
+//        deleteRecordContentResolver()
         queryRecordContentResolver()
 
         fab.setOnClickListener(object : View.OnClickListener {
@@ -50,6 +68,74 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onSaveClicked() {
+        val fragment = supportFragmentManager.findFragmentById(R.id.task_details_container)
+        removeEditPane(fragment)
+    }
+
+    override fun onTaskEdit(task: Task) {
+        taskEditRequest(task)
+    }
+
+    private fun removeEditPane(fragment: Fragment? = null) {
+        Log.d(TAG, "removeEditPane called")
+        if (fragment != null) {
+            Log.d(TAG, "removeEditPane : fragment is alive")
+            supportFragmentManager.beginTransaction()
+                .remove(fragment)
+                .commit()
+        }
+
+        // set the visibility of the right hand pane
+        findViewById<FrameLayout>(R.id.task_details_container).visibility = if (mTwoPane) View.INVISIBLE else View.GONE
+        //and show the left hand pane
+        findViewById<FragmentContainerView>(R.id.main_fragment)?.visibility = View.VISIBLE
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+
+    }
+    private fun taskEditRequest(task : Task?) {
+        Log.d(TAG, "taskEditRequest start")
+        val newFragment = AddEditFragment.newInstance(task)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.task_details_container, newFragment)
+            .commit()
+
+        showEditPane()
+    }
+
+    private fun showEditPane() {
+        findViewById<FrameLayout>(R.id.task_details_container).visibility = View.VISIBLE
+        // hide the left hand pane, if in single pane view
+        findViewById<FragmentContainerView>(R.id.main_fragment)?.visibility = if(mTwoPane) View.VISIBLE else View.GONE
+    }
+
+    override fun onPositiveDialogResult(dialogId: Int, args: Bundle) {
+
+        Log.d(TAG, "onPositiveDialogResult clicked with id : $dialogId")
+        if (dialogId == DIALOG_ID_CANCEL_EDIT) {
+            val fragment = supportFragmentManager.findFragmentById(R.id.task_details_container)
+            removeEditPane(fragment)
+            Log.d(TAG, "onPositiveDialogResult : clicked")
+        }
+    }
+
+    override fun onBackPressed() {
+        val fragment = supportFragmentManager.findFragmentById(R.id.task_details_container)
+        if (fragment == null || mTwoPane) {
+            super.onBackPressed()
+        } else {
+            if ((fragment is AddEditFragment) && fragment.isDirty()) {
+                showConfirmationDialog(DIALOG_ID_CANCEL_EDIT,
+                    getString(R.string.cancel_edit_dialog_message),
+                    R.string.cancel_edit_dialog_positive_caption,
+                    R.string.cancel_edit_dialog_negative_caption)
+            } else {
+                removeEditPane(fragment)
+            }
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.option_menu, menu)
         return true
@@ -57,13 +143,31 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        return when(item.itemId) {
+       when(item.itemId) {
             R.id.mainmenu_settigs -> {
                 Log.d(TAG, "onOptionsItemSelected : Settings is selected")
-                true
             }
-            else -> super.onOptionsItemSelected(item)
+
+           R.id.mainmenu_addTask -> {
+               Log.d(TAG, "onOptionsItemSelected : Settings is selected")
+                taskEditRequest(null)
+           }
+
+           android.R.id.home -> {
+               val fragment = supportFragmentManager.findFragmentById(R.id.task_details_container)
+               if ((fragment is AddEditFragment) && fragment.isDirty()) {
+                   showConfirmationDialog(DIALOG_ID_CANCEL_EDIT,
+                       getString(R.string.cancel_edit_dialog_message),
+                       R.string.cancel_edit_dialog_positive_caption,
+                       R.string.cancel_edit_dialog_negative_caption)
+               } else {
+                   removeEditPane(fragment)
+               }
+           }
+
         }
+
+        return super.onOptionsItemSelected(item)
     }
 
     private fun dropTable() : Unit {
@@ -128,6 +232,9 @@ class MainActivity : AppCompatActivity() {
                                 TaskContract.Column.TASK_SORT_ORDER)
 
         val sortColumn = TaskContract.Column.TASK_SORT_ORDER
+
+//        val selection = "${TaskContract.Column.TASK_NAME} = ?"
+//        val selectionArg = arrayOf("Task 3")
 //
 //        val cursor = contentResolver.query(TaskContract.buildUriFromId(1),
         val cursor = contentResolver.query(TaskContract.CONTENT_URI,

@@ -83,6 +83,8 @@ class AppProvider : ContentProvider() {
         Log.d(TAG, "query : called with uri $uri")
         val match = uriMatcher.match(uri)
         Log.d(TAG, "query: match is $match")
+        Log.d(TAG, "query: sortOrder $sortOrder")
+
 
         val queryBuilder = SQLiteQueryBuilder()
 
@@ -163,6 +165,11 @@ class AppProvider : ContentProvider() {
             else -> throw IllegalArgumentException("Unknown URI: $uri")
         }
 
+        if (recordId > 0) {
+            Log.d(TAG, "insert : setting notifyChange with $uri")
+            context!!.contentResolver.notifyChange(uri, null)
+        }
+
         Log.d(TAG, "Exiting : insert record $recordUri")
         return recordUri
     }
@@ -215,6 +222,11 @@ class AppProvider : ContentProvider() {
             else -> throw IllegalArgumentException("Unknown URI: $uri")
         }
 
+        if (count > 0) {
+            Log.d(TAG, "update : Setting notifyChange with $uri")
+            context!!.contentResolver.notifyChange(uri, null)
+        }
+
         Log.d(TAG, "update exit")
         return count
     }
@@ -265,6 +277,11 @@ class AppProvider : ContentProvider() {
             }
 
             else -> throw IllegalArgumentException("Unknown URI: $uri")
+        }
+
+        if (count > 0) {
+            Log.d(TAG, "update : Setting notifyChange with $uri")
+            context!!.contentResolver.notifyChange(uri, null)
         }
 
         Log.d(TAG, "delete exit")

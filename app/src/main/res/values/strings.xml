@@ -7,4 +7,23 @@
     <string name="mainmenu_durationReport">Duration Report</string>
     <string name="mainmenu_about">Show About</string>
     <string name="mainmenu_generate">Generate Data</string>
+    <string name="no_task_message">No Task Selected</string>
+    <string name="edit_button_description">Button to edit the Task</string>
+    <string name="delete_button_description">Button to delete the Task</string>
+    <string name="addedit_name_hint">Task Name : Required</string>
+    <string name="addedit_description_hint">Task Description : Optinal</string>
+    <string name="addedit_soortorder_hint">Sort Order : sort low to high</string>
+    <string name="instruction_heading">Instruction</string>
+    <string name="instructions">Use the add button (+) in the toolbar above to create new tasks.\n\nTasks with lower sort orders will be placed higher up the list.Tasks with the same sort order will be sorted alphabetically.\n\nTapping a task will start the timer for that task (and will stop the timer for any previous task that was being timed).\n\nEach task has Edit and Delete buttons if you want to change the details or remove the task.</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">Ok</string>
+    <string name="delete_dialog_positive_button">Delete</string>
+    <string name="delete_dialog_message">This will delete all Timing data associated with id %1$d: %2$s.</string>
+    <string name="cancel_edit_dialog_message">You have unsaved changes.  Do you want to abandon your changes, or continue editing?</string>
+    <string name="cancel_edit_dialog_positive_caption">Abandon changes</string>
+    <string name="cancel_edit_dialog_negative_caption">Continue editing</string>
+    <string name="about_copyright">Copyright © 2022 Jeremiah Adewole Tutorial</string>
+    <string name="about_weblink">Instruction available at www.learnprogramming.academy</string>
+    <string name="about_credits">Icon derived from <b>Analog Clock</b>  at <b>openclipart.org</b> by <b>Anonymous</b>></string>
+
 </resources>

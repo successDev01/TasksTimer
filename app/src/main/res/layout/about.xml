@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="?attr/dialogPreferredPadding"
+        android:paddingEnd="?attr/dialogPreferredPadding"
+        android:paddingBottom="?attr/dialogPreferredPadding">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/about_version"
+            tools:text="1.0.0"
+            android:textColor="#3A47B7"
+            android:textStyle="bold"
+            android:gravity="end" />
+
+    <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="8dp"
+            android:background="?android:attr/listDivider" />
+
+    <TextView
+            android:text="@string/about_copyright"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/about_copyright"
+            android:layout_marginTop="8dp"
+            android:textColor="#3A47B7" />
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/about_weblink"
+            android:layout_marginTop="8dp"
+            android:text="@string/about_weblink"
+            android:textColor="#3A47B7"
+            android:autoLink="web" />
+
+    <TextView
+            android:text="For support, Email success.developer01@gmail.com"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/about_email"
+            android:textColor="#3A47B7"
+            android:layout_marginTop="8dp"
+            android:autoLink="email" />
+
+    <TextView
+            android:text="@string/about_credits"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/about_credits"
+            android:textColor="#3A47B7"
+            android:layout_marginTop="8dp" />
+</LinearLayout>

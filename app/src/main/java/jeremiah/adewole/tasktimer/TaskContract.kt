@@ -11,6 +11,7 @@ object TaskContract {
     /**
      * The URI to Access the Task Table
      */
+    // "content://jeremiah.adewole.tasktimer.provider/Task"
     val CONTENT_URI = Uri.withAppendedPath(CONTENT_AUTHORITY_URI, TABLE_NAME)
 
     const val CONTENT_TYPE = "vnd.android.cursor.dir/vnd.$CONTENT_AUTHORITY.$TABLE_NAME"
@@ -31,6 +32,4 @@ object TaskContract {
     fun buildUriFromId(id : Long) : Uri {
         return ContentUris.withAppendedId(CONTENT_URI, id)
     }
-
-
 }
